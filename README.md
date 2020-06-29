@@ -16,8 +16,9 @@ A[1. For each brain region separately, merge BAM files with SAMtools] --> B[2. F
   D --> E[5. Combine all peaks  with rbind in R. These peaks are the Regions of Open Chromatin or ROCs];
   E --> F[6. Keep only intergenic ROCs or iROCs];
   F --> G[7. Quantify transcription within iROCs];
-  G --> H[8. Identify all genes within 1MB up and downstream from TAPE center];
-  H --> I[9. Correlate eRNA and mRNA transcriptional abundance];
+  G --> H[8. Identify iROCs with bidirectional transcription. These are Transcriptionally Active Putative Enhancers or TAPEs]
+  H --> I[9. Identify all genes within 1MB up and downstream from TAPE center];
+  I --> J[10. Correlate eRNA and mRNA levels for predicted enhancer-gene pairs];
 	style A fill:#98EFFF,stroke:#000,stroke-width:2px;	
 	style B fill:#98EFFF,stroke:#000,stroke-width:2px;	
 	style C fill:#98EFFF,stroke:#000,stroke-width:2px;	
@@ -26,7 +27,8 @@ A[1. For each brain region separately, merge BAM files with SAMtools] --> B[2. F
 	style F fill:#98EFFF,stroke:#000,stroke-width:2px;	
 	style G fill:#98EFFF,stroke:#000,stroke-width:2px;	
 	style H fill:#98EFFF,stroke:#000,stroke-width:2px;	
-	style I fill:#98EFFF,stroke:#000,stroke-width:2px;	
+	style I fill:#98EFFF,stroke:#000,stroke-width:2px;
+	style J fill:#98EFFF,stroke:#000,stroke-width:2px;	
 ```
 
 ## **NGS Experimental Details**
