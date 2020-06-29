@@ -8,6 +8,14 @@ This page contains bash and R code, as well as SeqMonk workflow information, for
 
 The diagram below outlines a general workflow for the identifcation of enhancers. Code corresponding to each step can be found within the repository. 
 
+```mermaid
+graph TD;
+  A-->B;
+  A-->C;
+  B-->D;
+  C-->D;
+```
+
 ## **Study design**
 
 snRNA-seq datasets generated here were obtained from two experimental preparations:
