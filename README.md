@@ -1,7 +1,7 @@
-# **Science_Advances_2020**
+# **Enhancer RNAs predict enhancer-gene regulatory links and are critical for enhancer function in neuronal systems**
 
 
-This page contains R and Python code for analysis of single-nucleus RNA-seq (snRNA-seq) datasets from "A dopamine-induced gene expression signature regulates neuronal function and cocaine response".  
+This page contains bash and R code, as well as SeqMonk workflow information, for the enhancer identification pipeline used in "Enhancer RNAs predict enhancer-gene regulatory links and are critical for enhancer function in neuronal systems"  
 
 
 ## **Study design**
