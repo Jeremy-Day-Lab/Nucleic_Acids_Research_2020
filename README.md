@@ -6,7 +6,7 @@ This page contains bash and R code, as well as SeqMonk workflow information, for
 
 ## **General Enhancer Identification Workflow**
 
-The diagram below outlines a general workflow for the identifcation of enhancers. Code corresponding to each step can be found within the repository. 
+The diagram below outlines a general workflow for the identifcation of enhancers. Code corresponding to each step can be found within a directory above. 
 
 ```mermaid
 graph TD;
