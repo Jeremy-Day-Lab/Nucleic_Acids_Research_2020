@@ -35,7 +35,7 @@ RNA-Seq and ATAC-Seq datasets were generated from striatal, cortical, and hippoc
 
 ## **Citation**
 
-Nancy V.N. Carullo, Robert A. Phillips III, Rhiana C. Simon, Salomon A. Roman Soto, Jenna E. Hinds, Aaron J. Salisbury, Jasmin S. Revanna, Kendra D. Bunner, Lara Ianov, Faraz A. Sultan, Katherine E. Savell, Charles A. Gersbach, Jeremy J. Day. Enhancer RNAs predict enhancer-gene regulatory links and are critical for enhancer function in neuronal systems. 2020. Nucleic Acids Research. 
+Nancy V.N. Carullo, Robert A. Phillips III, Rhiana C. Simon, Salomon A. Roman Soto, Jenna E. Hinds, Aaron J. Salisbury, Jasmin S. Revanna, Kendra D. Bunner, Lara Ianov, Faraz A. Sultan, Katherine E. Savell, Charles A. Gersbach, Jeremy J. Day. Enhancer RNAs predict enhancer-gene regulatory links and are critical for enhancer function in neuronal systems. 2020. *Nucleic Acids Research*. 
 
 
 ## **Links**
