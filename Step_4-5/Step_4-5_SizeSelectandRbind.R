@@ -40,4 +40,3 @@ write.table(x = All_Regions,
             col.names = FALSE,
             sep = "\t")
 
-#Using bedtools the All_Regions file generated above was then 
