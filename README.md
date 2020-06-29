@@ -18,7 +18,15 @@ A[1. For each brain region separately, merge BAM files with SAMtools] --> B[2. F
   F --> G[7. Quantify transcription within iROCs];
   G --> H[8. Identify all genes within 1MB up and downstream from TAPE center];
   H --> I[9. Correlate eRNA and mRNA transcriptional abundance];
-		
+	style A fill:#98EFFF,stroke:#000,stroke-width:2px;	
+	style B fill:#98EFFF,stroke:#000,stroke-width:2px;	
+	style C fill:#98EFFF,stroke:#000,stroke-width:2px;	
+	style D fill:#98EFFF,stroke:#000,stroke-width:2px;	
+	style E fill:#98EFFF,stroke:#000,stroke-width:2px;	
+	style F fill:#98EFFF,stroke:#000,stroke-width:2px;	
+	style G fill:#98EFFF,stroke:#000,stroke-width:2px;	
+	style H fill:#98EFFF,stroke:#000,stroke-width:2px;	
+	style I fill:#98EFFF,stroke:#000,stroke-width:2px;	
 ```
 
 ## **Study design**
