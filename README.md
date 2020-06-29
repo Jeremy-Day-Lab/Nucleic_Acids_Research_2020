@@ -4,13 +4,9 @@
 This page contains bash and R code, as well as SeqMonk workflow information, for the enhancer identification pipeline used in "Enhancer RNAs predict enhancer-gene regulatory links and are critical for enhancer function in neuronal systems"  
 
 
-```mermaid
-graph TD;
-  A-->B;
-  A-->C;
-  B-->D;
-  C-->D;
-```
+## **General Enhancer Identification Workflow**
+
+The diagram below outlines a general workflow for the identifcation of enhancers. Code corresponding to each step can be found within the repository. 
 
 ## **Study design**
 
@@ -33,25 +29,16 @@ Datasets in this manuscript used the 10X Genomics Chromium Single Cell 3’ libr
 
 ## **Citation**
 
-Savell, K.E.*, Tuscher, J.J.*, Zipperly, M.E.*, Duke, C.G.*, Phillips III, R.A.*, Bauman, A.J., Thukral, S., Sultan, F.A., Goska, N.A., Ianov, L., & Day, J.J. (2020). A dopamine-induced gene expression signature regulates neuronal function and cocaine response. *Science Advances* 6(26): eaba4221.
-[Link](https://advances.sciencemag.org/content/6/26/eaba4221)
+
 
 
 ## **Links**
 
 All Day lab resources may be found at the [Day Lab website](http://day-lab.org/resources)  
-[Ratlas Shiny App](https://day-lab.shinyapps.io/ratlas/)  
-[Published manuscript](https://advances.sciencemag.org/content/6/26/eaba4221)  
-[BioRxiv preprint](https://www.biorxiv.org/content/10.1101/781872v1)  
+[BioRxiv preprint](https://www.biorxiv.org/content/10.1101/270967v3)  
 
 
 ## **Raw data**
 
-Primary striatal neuron culture snRNA-seq - GEO accession [GSE137759](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE137759)  
-Adult NAc snRNA-seq - GEO accession [GSE137763](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE137763)  
+Will be added once deposited on GEO
 
-
-## **Source code**
-
-[Manifold Enhancement of Latent Dimensions (MELD)](https://github.com/KrishnaswamyLab/MELD)  
-[Seurat v3](https://github.com/satijalab/seurat)  
