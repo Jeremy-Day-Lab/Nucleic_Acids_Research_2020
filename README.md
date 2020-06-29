@@ -29,28 +29,13 @@ A[1. For each brain region separately, merge BAM files with SAMtools] --> B[2. F
 	style I fill:#98EFFF,stroke:#000,stroke-width:2px;	
 ```
 
-## **Study design**
+## **NGS Experimental Details**
 
-snRNA-seq datasets generated here were obtained from two experimental preparations:
-
-1. The rat nucleus accumbens (NAc), with samples taken from four experimental groups:  
-	*Male adult rats, 1hr following saline injection  
-	*Male adult rats, 1hr following cocaine injection (20mg/kg, I.P.)  
-	*Female adult rats, 1hr following saline injection  
-	*Female adult rats, 1hr following cocaine injection (20mg/kg, I.P.)  
-
-2. Primary striatal neurons (mixed from male and female E18 rat brains and cultured to DIV11) from four experimental groups:  
-	*Vehicle (media alone, 1hr)  
-	*Dopamine (50µM, 1hr)  
-	*SKF-38393 (1µM, 1hr)  
-	*Potassium chloride (25mM, 1hr)  
-
-Datasets in this manuscript used the 10X Genomics Chromium Single Cell 3’ library construction kit to generate barcoded libraries for Illumina sequencing. For each dataset, we provide R Markdown and Word documents containing analysis parameters and code, as well as Python notebooks for generation of enhanced experimental signal (EES) values from the MELD package (Krishnaswamy Lab).  
-
+RNA-Seq and ATAC-Seq datasets were generated from striatal, cortical, and hippocampal primary neuron cultures treated with 10mM KCl or a vehicle solution for one hour. Library preparation details can be found in the methods section of the manuscript. 
 
 ## **Citation**
 
-
+Nancy V.N. Carullo, Robert A. Phillips III, Rhiana C. Simon, Salomon A. Roman Soto, Jenna E. Hinds, Aaron J. Salisbury, Jasmin S. Revanna, Kendra D. Bunner, Lara Ianov, Faraz A. Sultan, Katherine E. Savell, Charles A. Gersbach, Jeremy J. Day. Enhancer RNAs predict enhancer-gene regulatory links and are critical for enhancer function in neuronal systems. 2020. Nucleic Acids Research. 
 
 
 ## **Links**
@@ -61,5 +46,5 @@ All Day lab resources may be found at the [Day Lab website](http://day-lab.org/r
 
 ## **Raw data**
 
-Will be added once deposited on GEO
+Raw data will be added once the GEO submission is finalized. 
 
