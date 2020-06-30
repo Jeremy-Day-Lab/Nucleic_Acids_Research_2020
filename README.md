@@ -33,7 +33,7 @@ A[1. For each brain region separately, merge BAM files with SAMtools] --> B[2. F
 
 ## **NGS Experimental Details**
 
-RNA-Seq and ATAC-Seq datasets were generated from striatal, cortical, and hippocampal primary neuron cultures treated with 10mM KCl or a vehicle solution for one hour. Library preparation details can be found in the methods section of the manuscript. 
+RNA-Seq and ATAC-Seq datasets were generated from striatal, cortical, and hippocampal primary neuron cultures treated with 10mM KCl or a vehicle solution for one hour on DIV11. Library preparation details can be found in the methods section of the manuscript. 
 
 ## **Citation**
 
