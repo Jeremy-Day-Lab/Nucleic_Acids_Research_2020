@@ -1,0 +1,206 @@
+---
+title: "Enhancer RNAs Predict Enhancer-Gene Regulatory Links and are Critical for Enhancer Function in Neuronal systems\nSupplemental Code"
+author: "Robert A. Phillips III & Jeremy J. Day "
+#date: "5/5/2020"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Mapping Transcriptionally Active Putative Enhancers (TAPEs) to Genes
+The goal of this analysis is to identify high confidence TAPE-gene pairs. To do this, transcription start sites located within 1Mb upstream or downstream from the center of the TAPE are identified. Then, pearson's correlations are calculated using counts for the TAPEs and associated genes
+
+##Load Libraries
+First, all essential libraries are loaded for the analysis. 
+```{r load libraries}
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(Seurat))
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(cowplot))
+suppressPackageStartupMessages(library(data.table))
+suppressPackageStartupMessages(library(VennDiagram))
+```
+
+## Load in Required Data
+First, read in the 28,492 TAPEs identified in the pipeline. 
+```{r read in TAPEs dataframe}
+TAPEs <- read.table(file = "~/TAPE_RNA_quantification_CPKM.txt",sep = "\t",header = TRUE)
+```
+Now we are going to create a column indicating these as intergenic TAPEs. Then, we are going to create an ID column consisting of the TAPE chromosome, starting position, and ending position. Next, we will rename the first four columnns. The start and end will be referred to as five and three prime end as the SeqMonk software used during the pipeline refers to the 5' end of all genes as the start, regardless of whehter that gene is on the - strand. Thus, referring to the start/end as five prime and three prime will allow us to correctly calculate distance later in this workflow. Finally, the center of the TAPE is calculated. 
+```{r TAPE dataframe management}
+#Give a column indicating the type
+TAPEs$Type <- "Intergenic"
+
+#Create a column with a unique ID. 
+TAPEs$ID <- paste(TAPEs$Chromosome,TAPEs$Start,TAPEs$End,sep = "_")
+
+#Change the TAPEs names 
+names(TAPEs)[1:4] <- c("TAPE_ID","TAPE_Chr","TAPE_Five_Prime_End","TAPE_Three_Prime_End")
+
+#Calculate the center of the TAPE 
+TAPEs$TAPE_Center <- TAPEs[,"TAPE_Five_Prime_End"] + (round(abs(TAPEs[,"TAPE_Five_Prime_End"] - TAPEs[,"TAPE_Three_Prime_End"])/2))
+```
+Next, I will read in the genes used during TAPE identification and change the column names. 
+```{r genes dataframe management}
+#read in the genes that were used to during enhancer identificaiton 
+genes <- read.delim(file = "~/Rn6_v95_gtf_genesonly_noBS.txt",sep = "\t")
+
+#Change column naems
+names(genes) <- c("Chr","Gene_Five_Prime_End","Gene_Three_Prime_End","Strand","Gene")
+```
+To map the TAPEs to associated genes, we will use a for loop. As the for loop proceeds, any TAPE that maps to the gene will be input into a large list created below. Here, every element of the list corresponds to a unique gene.   
+```{r build genes_list}
+# Here I make an empty list to input the annotated TAEs into
+genes_list <- vector(mode   = "list", 
+                     length = nrow(genes))
+#Name every element of the list a unique name for that gene. This consists of chr,5' end, 3' end, Gene name, and strand that is comma separated
+names(genes_list) <- paste(paste(paste(paste(genes$Chr,genes$Gene_Five_Prime_End,sep = ","),
+                                       genes$Gene_Three_Prime_End,sep = ","),
+                                 genes$Gene,sep = ","),
+                           genes$Strand,sep = ",")
+```
+Next we run a sanity check to make sure that the dataframe and list are in the same order. 
+```{r sanity check for genes_list}
+#Make sure the dataframe and list are in the same order
+all(as.character(lapply(strsplit(names(genes_list),split = ","),"[",4)) == genes$Gene) # TRUE
+
+all(as.character(lapply(strsplit(names(genes_list),split = ","),"[",5)) == genes$Strand) # TRUE
+
+all(as.character(lapply(strsplit(names(genes_list),split = ","),"[",1)) == genes$Chr) # TRUE
+
+all(as.numeric(lapply(strsplit(names(genes_list),split = ","),"[",2))   == genes$Gene_Five_Prime_End) # TRUE
+
+all(as.numeric(lapply(strsplit(names(genes_list),split = ","),"[",3))   == genes$Gene_Three_Prime_End) # TRUE
+```
+
+# Identify TAPE-Gene Pairs
+Now we annotate all genes that are 1Mbp upstream and downstream of the TAPE. This loops through the genes dataframe, and first asks if the strand of the gene is + or -. If the strand of the gene is positive all calculations are computed using the five prime end of the gene. If the strand of the gene is negative all calculations are computed using the three prime end of the gene. This search is gene-centric in that this loop identifies genes that fall within 1Mbp windows from the center of the TAPE.A progress bar will also print the progress of the loop.
+```{r Annotate TAPEs,echo = FALSE,warning=FALSE}
+for(i in 1:nrow(genes)){
+  if(as.character(genes$Strand[i]) == "+"){
+    Five_Prime_up    <- which((genes$Gene_Five_Prime_End[i] > (TAPEs$TAPE_Center-1e+06)) & (genes$Gene_Five_Prime_End[i] < TAPEs$TAPE_Center) & (as.character(genes$Chr)[i] == as.character(TAPEs$TAPE_Chr)))
+    Five_Prime_Down  <- which((genes$Gene_Five_Prime_End[i] < (TAPEs$TAPE_Center+1e+06)) & (genes$Gene_Five_Prime_End[i] > TAPEs$TAPE_Center) & (as.character(genes$Chr)[i] == as.character(TAPEs$TAPE_Chr)))
+    Annotations      <- c(Five_Prime_up,Five_Prime_Down)
+  }else{
+    Three_Prime_up   <- which((genes$Gene_Three_Prime_End[i] >  (TAPEs$TAPE_Center-1e+06)) & (genes$Gene_Three_Prime_End[i] < TAPEs$TAPE_Center) &  (as.character(genes$Chr)[i] == as.character(TAPEs$TAPE_Chr)))
+    Three_Prime_Down <- which((genes$Gene_Three_Prime_End[i] < (TAPEs$TAPE_Center+1e+06)) & (genes$Gene_Three_Prime_End[i] > TAPEs$TAPE_Center) & (as.character(genes$Chr)[i] == as.character(TAPEs$TAPE_Chr)))
+    Annotations      <- c(Three_Prime_up,Three_Prime_Down)
+  }
+  #Get rid of duplicates 
+  Annotations <- unique(Annotations)
+  if(length(Annotations) >=1 ){
+    genes_list[[i]] <- TAPEs[Annotations,]
+  }else{
+    next
+  }
+}
+```
+Next, we identify any genes in which there were no associated TAPEs. These empty elements are then removed from the list.
+```{r Identify empty elements}
+#Empty vector for identification of empty list elements
+x <-vector()
+#Run loop
+for(i in 1:length(genes_list)){
+  if(is.null(genes_list[[i]])){
+    x <- append(x = x,i)
+  }else{
+    next
+  }
+}
+#Remove genes with no TAPEs
+genes_list <- genes_list[-x]
+```
+This for loop adds a column to every dataframe in the list that indicates the gene name, strand, chr, 5'end, 3' end. The list is then unlisted to create a large dataframe that can be exported. Finally, a sanity chekc is run to make sure that no rows are duplicated. 
+```{r Build TAPEs_df}
+for(i in 1:length(genes_list)){
+  genes_list[[i]]$Gene                 <- as.character(lapply(strsplit(names(genes_list)[i],split = ","),"[",4))
+  genes_list[[i]]$Strand               <- as.character(lapply(strsplit(names(genes_list)[i],split = ","),"[",5))
+  genes_list[[i]]$Gene_Chr             <- as.character(lapply(strsplit(names(genes_list)[i],split = ","),"[",1))
+  genes_list[[i]]$Gene_Five_Prime_End  <- as.numeric(lapply(strsplit(names(genes_list)[i],split = ","),"[",2))
+  genes_list[[i]]$Gene_Three_Prime_End <- as.numeric(lapply(strsplit(names(genes_list)[i],split = ","),"[",3))
+}
+
+#unlist and make a huge dataframe
+TAPEs_df <- rbindlist(genes_list) 
+
+#There should not be any duplicated rows, but this command is a sanity check 
+TAPEs_df <- as.data.frame(distinct(TAPEs_df)) #433,416
+```
+Here distance is calculated. If the gene is on the + strand, the TSS is the five prime end of the gene. If the gene is on the - strand, the TSS is the three prime end of the gene. 
+```{r Make TSS column}
+# Calculate distance and orientation based on strand
+TAPEs_df$Distance    <- NA
+TAPEs_df$Orientation <- NA
+TAPEs_df$Orientation <- as.character(TAPEs_df$Orientation)
+#Calculate distance and orientation based on strand
+#To calculate the distance, the TSS for each gene must be identified. The TSS changes for each gene's strandedness in that a + stand gene's TSS will be in the Gene_Five_Prime_End column and a - strand gene's TSS will be in the Gene_Three_Prime End column
+TAPEs_df$TSS <- NA
+TAPEs_df <- TAPEs_df %>% mutate(TSS = ifelse(Strand == "+",
+                                             TAPEs_df$Gene_Five_Prime_End,
+                                             TAPEs_df$Gene_Three_Prime_End))
+```
+Next, the orientation of the gene to the TAPE is identified and distance from center of TAPE to TSS of gene is calculated. 
+```{r Orientation identification}
+# #If the Gene's TSS is < the TAPE center and > TAPE-1e6 then the gene is upstream of the enhancer
+# #If the Gene's TSS is > the TAPE center and < TAPE+1e6 then the gene is downstream of the enhancer
+TAPEs_df <- TAPEs_df %>% mutate(Orientation = ifelse((TAPEs_df$TSS < TAPEs_df$TAPE_Center) & (TAPEs_df$TSS > (TAPEs_df$TAPE_Center - 1e+06)),
+                                                     "Upstream",
+                                                     ifelse((TAPEs_df$TSS > TAPEs_df$TAPE_Center) & (TAPEs_df$TSS < (TAPEs_df$TAPE_Center+1e+06)),
+                                                            "Downstream",
+                                                            0)
+)
+)
+#Calculate Distance 
+TAPEs_df <- TAPEs_df %>% mutate(Distance = ifelse(Orientation == "Upstream",
+                                                  TAPEs_df$TAPE_Center - TAPEs_df$TSS,
+                                                  TAPEs_df$TSS - TAPEs_df$TAPE_Center))
+#Another sanity check that the chromosomes of the TAPEs and the genes are the same
+table(as.character(TAPEs_df$TAPE_Chr) == as.character(TAPEs_df$Gene_Chr))
+```
+To calculate correlations we need TAPE and gene counts. The TAPE counts are already within the TAPEs dataframe. Here, we load in mRNA count information. Next, we keep only genes in which there is one annotation. Finally, only useful columns are kept. 
+```{r}
+#Read in the Gene Probe counts identified with Seqmonk
+Gene_Probe_Counts <- read.delim(file = "~/mRNA_quantification_CPKM.txt",sep = "\t")
+#Keep only genes in which there is one annotated gene. 
+Gene_Probe_Counts <- Gene_Probe_Counts[!duplicated(as.character(Gene_Probe_Counts$Probe)),]
+#Pull out useful columns Probe, Sample Counts
+Gene_Probe_Counts <- Gene_Probe_Counts[,c(1,13:31)]
+```
+Within this loop, pearson's correlations are calculated. 
+```{r,warning=FALSE}
+#Make columns for correlations
+TAPEs_df$Cortex_Correlation      <- NA
+TAPEs_df$Hippocampus_Correlation <- NA
+TAPEs_df$Striatum_Correlation    <- NA
+TAPEs_df$Global_Correlation      <- NA
+x <- vector()
+#Now calculate correlations 
+for(i in 1:nrow(TAPEs_df)){
+  #figure out which row in the Gene_Probe_Counts column corresponds to the gene in the TAPEs_df column
+  row <- which(as.character(TAPEs_df[i,"Gene"]) == as.character(Gene_Probe_Counts$Probe))
+  if(length(row) >0){
+    #####Cortex####
+    #Calculate the correlation
+    TAPEs_df[i,"Cortex_Correlation"] <- cor(y = as.numeric(TAPEs_df[i,c(13:18)]),x = as.numeric(Gene_Probe_Counts[row,c(2:7)]))
+    #####Hippocampus######
+    #Calculate the correlation
+    TAPEs_df[i,"Hippocampus_Correlation"] <- cor(y = as.numeric(TAPEs_df[i,c(19:24)]),x = as.numeric(Gene_Probe_Counts[row,c(8:13)]))
+    #######Striatum#######
+    #Calculate the correlation 
+    TAPEs_df[i,"Striatum_Correlation"]  <- cor(y = as.numeric(TAPEs_df[i,c(25:31)]),x = as.numeric(Gene_Probe_Counts[row,c(14:20)]))
+    #Gloabl Correlation
+    #calculate the correlation
+    TAPEs_df[i,"Global_Correlation"] <- cor(y = as.numeric(TAPEs_df[i,13:31]),x = as.numeric(Gene_Probe_Counts[row,2:20]))
+  }else{
+    x <- append(x = x,i)
+  }
+}
+```
+Some of the genes have count values of 0 for every sample across all cell types. This results in a correaltion value of 0. Thus, these TAPE-gene pairs are removed, leaving us with 388,605 potential TAPE-gene pairs. 
+```{r Remove Na correlations}
+TAPEs_df <- TAPEs_df[!is.na(TAPEs_df$Global_Correlation),]
+nrow(TAPEs_df) #388,605
+```
