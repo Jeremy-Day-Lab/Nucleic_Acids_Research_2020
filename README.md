@@ -10,7 +10,7 @@ The diagram below outlines a general workflow for the identifcation of enhancers
 
 ```mermaid
 graph TD;
-A[1. For each brain region separately, merge BAM files with SAMtools] --> B[2. For each brain region separately, call peaks with MACS2];
+A[1. For each brain region separately, merge BAM files with SAMtools] --> B[2. For each brain region separately, Call peaks with MACS2];
   B --> C[3. For each brain region separately, merge peaks within 1kb using bedtools];
   C --> D[4. For each brain region separately, remove any peaks smaller than 146 bp or the legnth of DNA wrapped around a nucleosome];
   D --> E[5. Combine all peaks  with rbind in R. These peaks are the Regions of Open Chromatin or ROCs];
