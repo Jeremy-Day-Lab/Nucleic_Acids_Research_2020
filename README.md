@@ -19,16 +19,16 @@ A[1. For each brain region separately, merge BAM files with SAMtools] --> B[2. F
   G --> H[8. Identify iROCs with bidirectional transcription. These are Transcriptionally Active Putative Enhancers or TAPEs]
   H --> I[9. Identify all genes within 1MB up and downstream from TAPE center];
   I --> J[10. Correlate eRNA and mRNA levels for predicted enhancer-gene pairs];
-	style A fill:#98EFFF,stroke:#000,stroke-width:2px;	
-	style B fill:#98EFFF,stroke:#000,stroke-width:2px;	
-	style C fill:#98EFFF,stroke:#000,stroke-width:2px;	
-	style D fill:#98EFFF,stroke:#000,stroke-width:2px;	
-	style E fill:#98EFFF,stroke:#000,stroke-width:2px;	
-	style F fill:#98EFFF,stroke:#000,stroke-width:2px;	
-	style G fill:#98EFFF,stroke:#000,stroke-width:2px;	
-	style H fill:#98EFFF,stroke:#000,stroke-width:2px;	
-	style I fill:#98EFFF,stroke:#000,stroke-width:2px;
-	style J fill:#98EFFF,stroke:#000,stroke-width:2px;	
+	style A fill:#000000,stroke:#000,stroke-width:2px;	
+	style B fill:#000000,stroke:#000,stroke-width:2px;	
+	style C fill:#000000,stroke:#000,stroke-width:2px;	
+	style D fill:#000000,stroke:#000,stroke-width:2px;	
+	style E fill:#000000,stroke:#000,stroke-width:2px;	
+	style F fill:#000000,stroke:#000,stroke-width:2px;	
+	style G fill:#000000,stroke:#000,stroke-width:2px;	
+	style H fill:#000000,stroke:#000,stroke-width:2px;	
+	style I fill:#000000,stroke:#000,stroke-width:2px;
+	style J fill:#000000,stroke:#000,stroke-width:2px;	
 ```
 
 ## **NGS Experimental Details**
